@@ -6,4 +6,3 @@ public class PassengerVehicle extends vehicle{
         System.out.println("normal drive capability");
     }
 }
-}
