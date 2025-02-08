@@ -1,0 +1,13 @@
+The Decorator Pattern allows dynamically adding new behaviors to an object without modifying its original structure. It is an alternative to subclassing, where functionality can be extended at runtime.
+
+
+/*
+Pros & Cons of Decorator Pattern
+
+✅ Advantages: ✔ Flexible Extension – You can add new features at runtime.
+✔ Avoids Subclass Explosion – Instead of making many subclasses, we dynamically compose behavior.
+✔ Open-Closed Principle (OCP) – You can extend functionality without modifying existing code.
+
+❌ Disadvantages: ✘ Complexity Increases – Too many small classes can make it harder to read and maintain.
+✘ Difficult Debugging – Since multiple objects wrap each other, debugging is tricky.
+*/
