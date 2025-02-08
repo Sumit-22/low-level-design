@@ -12,7 +12,8 @@ suppose these are assumed as tree so, may be at same level some child have diffe
 
 
 When to Use:-
-
+✔ when we have two or more child class have same code is using and that code is not present in the Base code
+(parent class) then we will used Strategy Design pattern
 
 
 
@@ -29,7 +30,7 @@ drawbacks:--
 
 */
 /*
-drive_strategy
+drive_strategy:-
 */
 
                           +----------------------+
