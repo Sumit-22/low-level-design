@@ -23,3 +23,27 @@ Decoupling the sender of a request from its receiver and allowing for parameteri
 - **Remote Control Systems**: Handling button presses for various devices.
 - **Queueing Systems**: Building job queues for tasks with different parameters.
 - **Transaction Management**: Managing database transactions as commands.
+
+## Uml:
+```plaintext
++-----------------+       +------------+               +---------------+
+|     Client      |       |  Invoker   |  ◇-------    |   Command     |
++-----------------+       +------------+               +---------------+
+         |                                                    △
+         |                                                    |
+         |                                                    |
+         |              <<instantiates>>            +---------------------+
+         | ---------------------------------------> | ConcreteCommand     |
+         |                                          +---------------------+
+         |                        +---------------  | -state: int         |
+         |                        |   receives      | +execute(): void    |
+         |                        |                 +---------------------+
+         |                        |                           |
+         |                        |                           |
+         |                        |                           |
+         ˅                        |                           |
++-----------------+               |                   +--------------------+
+|   Receiver      |<--------------+                   | execute() {        |
++-----------------+                                   | receiver.action(); |
+| +action(): void |                                   | }                  |
++-----------------+                                   +--------------------+
