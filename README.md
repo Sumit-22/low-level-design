@@ -76,7 +76,4 @@
 - How to Approach LLD Interviews
 - Mock Interviews & Sample Problems
 
-## 9️⃣ References & Further Reading
-- Recommended Books
-- Online Resources
-- Open-Source Projects
+
