@@ -1,7 +1,3 @@
-Here’s your **clean, GitHub-ready README.md with proper Mermaid diagram** 👇
-
----
-
 # 🌉 Bridge Design Pattern – Multi-Channel Notification Service
 
 ## 📌 Overview
