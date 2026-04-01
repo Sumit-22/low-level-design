@@ -107,7 +107,7 @@ Composite allows recursive structure.
 ---
 
 # 📊 UML Diagram (Mermaid) – Advanced Composite System
-
+```mermaid
 classDiagram
 
 class WorkflowNode {
@@ -183,7 +183,7 @@ WorkflowComposite --> WorkflowNode
 AtomicTask --> RetryPolicy
 ConditionalGroup --> Condition
 WorkflowNode --> ExecutionContext
-
+```
 🚀 Complex Project: API Gateway Middleware Pipeline (Decorator)
 
 ---
@@ -658,16 +658,3 @@ You say:
 
 > In workflow orchestration engines, rule engines, file systems, and UI trees where hierarchical structures exist and both individual nodes and groups must be treated uniformly. Composite enables recursive composition and scalable architecture.
 > 
-
-That’s senior-level thinking.
-
----
-
-If you want next, I can:
-
-- Add Visitor on top of this system
-- Add monitoring & metrics design
-- Convert this to event-driven async architecture
-- Or compare Composite vs Decorator confusion deeply
-
-Tell me your next level.
