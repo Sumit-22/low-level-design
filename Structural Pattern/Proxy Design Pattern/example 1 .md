@@ -149,21 +149,18 @@ Request comes:
 This is proxy chaining.
 
 # Clean Mental Model
-Client
-  ↓
-[ Logging Proxy ]
-  ↓
-[ Auth Proxy ]
-  ↓
-[ Rate Limit Proxy ]
-  ↓
-[ Circuit Breaker ]
-  ↓
-[ Cache Proxy ]
-  ↓
-[ Lazy Proxy ]
-  ↓
-Real Model Server
+
+flowchart TD
+    A[Client] --> B[Logging Proxy]
+    B --> C[Auth Proxy]
+    C --> D[Rate Limit Proxy]
+    D --> E[Circuit Breaker]
+    E --> F[Cache Proxy]
+    F --> G[Lazy Loading Proxy]
+    G --> H[Real Model Server]
+
+    classDef proxy fill:#1f2937,color:#fff,stroke:#3b82f6
+    class B,C,D,E,F,G proxy
 
 👉 This is basically:
 
