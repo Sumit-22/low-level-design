@@ -1,6 +1,7 @@
 # Example 3 Spring Boot AOP-Based Proxy (Enterprise Grade)
 
 📊 UML – AOP Proxy
+```mermaid
 classDiagram
 
 class InferenceService {
@@ -30,3 +31,4 @@ SpringAOPProxy --> InferenceServiceImpl
 AuthAspect --> SpringAOPProxy
 LoggingAspect --> SpringAOPProxy
 RateLimitAspect --> SpringAOPProxy
+```
