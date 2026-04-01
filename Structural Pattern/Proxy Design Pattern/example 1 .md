@@ -150,6 +150,7 @@ This is proxy chaining.
 
 # Clean Mental Model
 
+```mermaid
 flowchart TD
     A[Client] --> B[Logging Proxy]
     B --> C[Auth Proxy]
@@ -161,10 +162,11 @@ flowchart TD
 
     classDef proxy fill:#1f2937,color:#fff,stroke:#3b82f6
     class B,C,D,E,F,G proxy
+```
 
 👉 This is basically:
-
 Proxy chain = request processing pipeline
+
 # 🧪 Complex Production-Grade Implementation (Java)
 
 ## 1️⃣ Core Interface
