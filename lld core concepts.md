@@ -383,8 +383,3 @@ When you design:
 If you consciously apply these, interviewer immediately sees design maturity.
 
 ---
-
-If you want, next I can:
-
-- Show one complete LLD problem applying all these principles
-- Or give you a short “Interview Revision Sheet” summarizing everything in 1 page format
