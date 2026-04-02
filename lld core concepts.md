@@ -369,6 +369,530 @@ In interviews:
 
 ---
 
+# 🔷 1. What is Caching (Core Intuition)
+
+Caching = **store expensive-to-fetch data in fast memory (RAM)** so next request is fast.
+
+### Example:
+
+* DB query → 100ms
+* Cache (Redis / in-memory) → 1ms
+
+👉 So system becomes:
+
+```
+Client → Cache → DB (only on miss)
+```
+
+---
+
+# 🔷 2. Cache Flow (VERY IMPORTANT)
+
+```
+Request → Check Cache
+           ↓
+      HIT → return data
+      MISS → fetch from DB → store in cache → return
+```
+
+---
+
+# 🔷 3. SDE-1: LRU Cache (Most Important)
+
+## ✅ Intuition
+
+Remove the **least recently used** item.
+
+👉 Why?
+Recent items are likely to be reused (temporal locality)
+
+---
+
+## 🔹 Example
+
+```
+Capacity = 3
+Cache = [A, B, C]
+
+Access A → [B, C, A]
+Insert D → remove B → [C, A, D]
+```
+
+---
+
+## 🔹 Data Structures Used
+
+👉 This is **interview gold**
+
+| Structure          | Purpose        |
+| ------------------ | -------------- |
+| HashMap            | O(1) lookup    |
+| Doubly Linked List | Maintain order |
+
+---
+
+## 🔹 Why Doubly Linked List?
+
+Because:
+
+* Remove node in O(1)
+* Move node to front in O(1)
+
+---
+
+## 🔹 Java Implementation (Clean)
+
+```java
+class LRUCache {
+
+    class Node {
+        int key, value;
+        Node prev, next;
+    }
+
+    private Map<Integer, Node> map = new HashMap<>();
+    private int capacity;
+    private Node head, tail;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        head = new Node();
+        tail = new Node();
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public int get(int key) {
+        if (!map.containsKey(key)) return -1;
+
+        Node node = map.get(key);
+        remove(node);
+        insert(node);
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        if (map.containsKey(key)) {
+            remove(map.get(key));
+        }
+
+        if (map.size() == capacity) {
+            Node lru = tail.prev;
+            remove(lru);
+            map.remove(lru.key);
+        }
+
+        Node node = new Node();
+        node.key = key;
+        node.value = value;
+        insert(node);
+        map.put(key, node);
+    }
+
+    private void insert(Node node) {
+        node.next = head.next;
+        node.prev = head;
+        head.next.prev = node;
+        head.next = node;
+    }
+
+    private void remove(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+}
+```
+
+---
+
+## 🔹 Complexity
+
+| Operation | Time |
+| --------- | ---- |
+| get       | O(1) |
+| put       | O(1) |
+
+---
+
+# 🔷 4. SDE-1: LFU Cache
+
+## ✅ Intuition
+
+Remove **least frequently used** item.
+
+---
+
+## 🔹 Example
+
+```
+Cache = [A(3), B(1), C(2)]
+Evict → B (lowest freq)
+```
+
+---
+
+## 🔹 Problem with LFU
+
+* Harder to implement
+* Need to track:
+
+  * Frequency
+  * Recency within same frequency
+
+---
+
+## 🔹 Data Structures
+
+| Structure             | Purpose            |
+| --------------------- | ------------------ |
+| HashMap (key → node)  | Fast lookup        |
+| HashMap (freq → list) | Group by frequency |
+| Min frequency tracker | Know what to evict |
+
+---
+
+## 🔹 Complexity
+
+* O(1) (but tricky implementation)
+
+---
+
+# 🔷 5. LRU vs LFU (INTERVIEW FAV)
+
+| Feature  | LRU                 | LFU              |
+| -------- | ------------------- | ---------------- |
+| Basis    | Recency             | Frequency        |
+| Easy?    | ✅ Yes               | ❌ Hard           |
+| Use case | Recent data matters | Hot data matters |
+| Example  | Browsers            | CDN              |
+
+---
+
+# 🔷 6. Cache Invalidation (HARDEST PROBLEM)
+
+👉 “When to remove or update cache?”
+
+---
+
+## 🔹 Types
+
+### 1. Time-based (TTL)
+
+Auto expire after time
+
+```
+Cache: user_profile
+TTL = 5 min
+```
+
+---
+
+### 2. Event-based
+
+When DB updates → invalidate cache
+
+```
+User updates profile → delete cache
+```
+
+---
+
+### 3. Manual Invalidation
+
+Admin clears cache
+
+---
+
+## 🔴 Problem:
+
+* Stale data (old data served)
+
+---
+
+# 🔷 7. TTL (Time-To-Live)
+
+Each cache entry has expiry time.
+
+```
+Key: user_123
+Value: profile
+TTL: 300 seconds
+```
+
+👉 After expiry → treated as MISS
+
+---
+
+# 🔷 8. Write Strategies (VERY IMPORTANT)
+
+---
+
+## ✅ 1. Write-Through
+
+```
+Write → Cache + DB (both)
+```
+
+✔ Pros:
+
+* Consistent data
+
+❌ Cons:
+
+* Slow writes
+
+---
+
+## ✅ 2. Write-Back (Write-Behind)
+
+```
+Write → Cache
+DB updated later
+```
+
+✔ Pros:
+
+* Fast
+
+❌ Cons:
+
+* Data loss risk
+
+---
+
+## ✅ 3. Write-Around
+
+```
+Write → DB only
+Cache updated on next read
+```
+
+✔ Pros:
+
+* Avoid useless caching
+
+❌ Cons:
+
+* First read is slow
+
+---
+
+# 🔷 9. Distributed Cache
+
+## 🔹 Why needed?
+
+Single cache won’t scale.
+
+---
+
+## 🔹 Popular Systems
+
+* Redis
+* Memcached
+
+---
+
+## 🔹 Architecture
+
+```
+App Servers → Cache Cluster → DB
+```
+
+---
+
+# 🔷 10. Consistent Hashing (CRITICAL)
+
+## Problem:
+
+When adding/removing servers → data reshuffle
+
+---
+
+## Solution:
+
+Consistent hashing minimizes movement
+
+```
+Key → Hash ring → nearest server
+```
+
+✔ Only small % of keys move
+
+---
+
+# 🔷 11. Cache Partitioning
+
+## Types:
+
+### 1. Horizontal (Sharding)
+
+Split data across nodes
+
+```
+UserID % N → server
+```
+
+---
+
+### 2. Replication
+
+Same data on multiple nodes
+
+✔ Improves availability
+
+---
+
+# 🔷 12. Real Problems (VERY IMPORTANT)
+
+---
+
+## ⚠️ 1. Cache Stampede
+
+Many requests hit DB when cache expires.
+
+### Example:
+
+```
+Hot key expires → 1M requests → DB crash
+```
+
+---
+
+### Solutions:
+
+* Mutex lock
+* Request coalescing
+* Early refresh
+
+---
+
+## ⚠️ 2. Stale Data
+
+Cache has outdated data.
+
+### Solutions:
+
+* TTL
+* Event invalidation
+* Versioning
+
+---
+
+## ⚠️ 3. Memory Limits
+
+Cache is limited RAM.
+
+### Solutions:
+
+* Eviction policies (LRU/LFU)
+* Compression
+* Tiered caching
+
+---
+
+# 🔷 13. Advanced Concepts
+
+---
+
+## 🔥 Cache Aside (Most Common Pattern)
+
+```
+Read:
+→ check cache
+→ miss → DB → cache
+
+Write:
+→ DB → invalidate cache
+```
+
+---
+
+## 🔥 Read-Through Cache
+
+Cache itself fetches from DB
+
+---
+
+## 🔥 Write-Through Cache
+
+Cache handles DB writes
+
+---
+
+## 🔥 Hot Keys Problem
+
+Few keys get huge traffic.
+
+### Solution:
+
+* Replication
+* Load balancing
+
+---
+
+# 🔷 14. Real System Example (Swiggy/Uber Style)
+
+---
+
+## 🔹 What is Cached?
+
+* Restaurant list
+* Driver locations
+* Pricing
+* User session
+
+---
+
+## 🔹 Flow
+
+```
+User opens app
+→ Fetch restaurants
+→ Cache hit (fast)
+
+New restaurant added
+→ Invalidate cache
+```
+
+---
+
+## 🔹 Tech Stack
+
+* Redis (primary cache)
+* CDN (images)
+* DB (source of truth)
+
+---
+
+# 🔷 15. Interview Summary (CRISP)
+
+If interviewer asks:
+
+👉 “Design a cache system”
+
+You say:
+
+* Use LRU for eviction
+* Redis for distributed cache
+* Cache-aside pattern
+* Add TTL for expiry
+* Use consistent hashing for scaling
+* Handle stampede with locking
+
+---
+
+# 🔥 Final Takeaway
+
+Caching is not just:
+❌ “store data in memory”
+
+It is about:
+✔ Consistency
+✔ Scalability
+✔ Trade-offs
+✔ Failure handling
+
+---
 # How These Are Tested in LLD Interviews
 
 When you design:
