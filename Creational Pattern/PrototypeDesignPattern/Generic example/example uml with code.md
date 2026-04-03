@@ -1,3 +1,110 @@
+1 ) ProductPrototype Example : -
+
+```mermaid
+classDiagram
+
+class ProductPrototype {
+    <<abstract>>
+    +clone() ProductPrototype
+    +display() void
+}
+
+class Product {
+    -String name
+    -double price
+    +Product()
+    +clone() ProductPrototype
+    +display() void
+}
+
+ProductPrototype <|-- Product
+```
+
+```java
+// Abstract base class representing a prototype for products
+abstract class ProductPrototype {
+    public abstract ProductPrototype clone();
+    public abstract void display();
+}
+
+// Concrete prototype class representing a product
+class Product extends ProductPrototype {
+    private String name;
+    private double price;
+
+    public Product(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    @Override
+    public ProductPrototype clone() {
+        return new Product(name, price);
+    }
+
+    @Override
+    public void display() {
+        System.out.println("Product: " + name);
+        System.out.println("Price: $" + price);
+    }
+}
+
+public class ProductDemo {
+    public static void main(String[] args) {
+        // Create prototype instances of products
+        ProductPrototype product1 = new Product("Laptop", 999.99);
+        ProductPrototype product2 = new Product("Smartphone", 499.99);
+
+        // Clone the prototypes to create new product instances
+        ProductPrototype newProduct1 = product1.clone();
+        ProductPrototype newProduct2 = product2.clone();
+
+        System.out.println("Original Products:");
+        product1.display();
+        product2.display();
+
+        System.out.println("\nCloned Products:");
+        newProduct1.display();
+        newProduct2.display();
+    }
+}
+```
+
+2 ) UML – Router / Switch Prototype Example : -
+```mermaid
+classDiagram
+
+class NetworkDevice {
+    <<interface>>
+    +clone() NetworkDevice
+    +display() void
+    +update(String) void
+}
+
+class Router {
+    -String name
+    -String ip
+    -String securityPolicy
+    +Router(String, String, String)
+    +clone() NetworkDevice
+    +display() void
+    +update(String) void
+}
+
+class Switch {
+    -String name
+    -String protocol
+    +Switch(String, String)
+    +clone() NetworkDevice
+    +display() void
+    +update(String) void
+}
+
+NetworkDevice <|.. Router
+NetworkDevice <|.. Switch
+```
+
+```java
 abstract class NetworkDevice {
     public abstract NetworkDevice clone();
 
@@ -85,3 +192,4 @@ public class RouterDemo {
         switchClone.display();
     }
 }
+```
