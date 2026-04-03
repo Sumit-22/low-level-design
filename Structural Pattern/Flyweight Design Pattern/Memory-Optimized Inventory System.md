@@ -1,4 +1,4 @@
-## Memory-Optimized Inventory System using Flyweight Pattern
+## Product Catalog Deduplication using Flyweight Pattern
 # 🔷 1. FLYWEIGHT UML (CORE DESIGN)
 
 ```mermaid
